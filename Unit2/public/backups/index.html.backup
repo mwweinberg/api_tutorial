@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <title>Hello</title>
+  </head>
+  <body>
+    <script>
+    if ("geolocation" in navigator) {
+        console.log('geolocation available');
+        //calls the get current position api
+        //when the api is ready it activates the callback function
+        //in the ()
+        // the '=>' means 'position' is the name of the function at the far end of the arrow
+        navigator.geolocation.getCurrentPosition(position => {
+            console.log(position);
+            //variables to plug into the html
+            const lat = position.coords.latitude;
+            document.getElementById('latitude').textContent = lat;
+            const lon = position.coords.longitude;
+            document.getElementById('longitude').textContent = lon;
+        });
+    } else {
+        console.log('geolocation not available');
+    }
+
+
+
+    </script>
+
+
+    <h1>Data Selfie App</h1>
+    <p>
+        latitude: <span id="latitude"></span>&deg; <br>
+        longitude: <span id="longitude"></span>&deg;
+    </p>
+
+
+  </body>
+</html>

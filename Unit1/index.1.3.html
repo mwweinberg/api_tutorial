@@ -1,0 +1,103 @@
+<!DOCTYPE html?
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Coding Train: Data and APIs Project 1</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    </head>
+    <body>
+        <canvas id='chart' width="800" height="400"></canvas>
+        <script>
+            const xlabels = [];
+            const ylabels = [];
+
+            chartIt();
+
+            async function chartIt() {
+                //waits for getData to run before building the chart
+                //and turns what it returns into the variable
+                const data = await getData();
+                const ctx = document.getElementById('chart').getContext('2d');
+                const myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.xs,
+                        datasets: [
+                            {
+                            label: 'Global Average Temp',
+                            data: data.ys,
+                            fill: false,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        },{
+                            label: 'N Hem Average Temp',
+                            data: data.y2s,
+                            fill: false,
+                            backgroundColor: 'rgba(0, 132, 132, 0.2)',
+                            borderColor: 'rgba(0, 132, 132, 1)',
+                            borderWidth: 1
+
+
+
+                        }]
+                    },
+                    options: {
+                       scales: {
+                           yAxes: [{
+                               ticks: {
+                                   // Include a dollar sign in the ticks
+                                   callback: function(value, index, values) {
+                                       return value + '°';
+                                   }
+                               }
+                           }]
+                       }
+                   }
+
+                    });
+            }
+
+            // async modifier is because it is an asyncronous function
+            async function getData() {
+                const xs = [];
+                const ys = [];
+                const y2s = [];
+
+                //variable 'response' = the response from fetch(test.csv)
+                const response = await fetch('ZonAnn.Ts+dSST.csv');
+                // variable 'data' is the response from fetch structured as text
+                const data = await response.text();
+
+
+                //split up the rows in data using line break as the delimter
+                //slices off the header row and starts at index 1, which is the first data row
+                const table = data.split('\n').slice(1);
+
+                //function parsing each row
+                table.forEach(row => {
+                    //'row' becomes a list of elements
+                    const column = row.split(',');
+                    //year is the first element
+                    const year = column[0];
+                    //adds the year to the xlabels array
+                    xs.push(year);
+                    //temp is the second element
+                    const temp = column[1];
+                    //turns the data into an absolute temp instead of variance from mean
+                    ys.push(parseFloat(temp) + 14);
+                    console.log(year, temp);
+
+                    const tempN = column[2];
+                    y2s.push(parseFloat(tempN) + 14);
+
+                });
+                //returns these values and allows you to call them easily in chartIt()
+                return {xs, ys, y2s};
+            }
+
+        </script>
+    <body>
+</html>

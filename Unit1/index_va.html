@@ -1,0 +1,40 @@
+<!DOCTYPE html?
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Fetch JSON from API to map lat long</title>
+    </head>
+
+        <h1>Where is the ISS?</h1>
+
+        <p>latitude: <span id='lat'></span><br/>
+            longitude: <span id='lon'></span></p>
+
+    <body>
+        <script>
+
+            const api_url = 'https://www.vam.ac.uk/api/json/museumobject/search?materialsearch=silver';
+
+            // asyncronous function to get the location data
+            async function getISS() {
+                //variable response gets the json file
+                const response = await fetch(api_url);
+                //packages the response into a json file
+                const data = await response.json();
+                console.log(data);
+
+                //write the elements to the body
+                //document.getElementById('lat').textContent = latitude;
+                //document.getElementById('lon').textContent = longitude
+                //console.log(latitude);
+                //console.log(longitude);
+            }
+
+            getISS();
+
+
+        </script>
+    <body>
+</html>
